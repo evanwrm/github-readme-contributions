@@ -1,7 +1,12 @@
 import { roundRect } from "@/lib/canvas";
 import { ISO_DAY_SIZE, ISO_MAX_HEIGHT, STAT_FONT } from "@/lib/constants";
 import { calculateStats } from "@/lib/contributions";
-import { ContributionCalendar, ContributionDay, GithubContributions } from "@/lib/github";
+import {
+    ContributionCalendar,
+    ContributionDay,
+    GithubContributions,
+    contributionLevelToNumber
+} from "@/lib/github";
 import { isometrics } from "@/lib/isometric";
 import { Theme, defaultTheme } from "@/lib/theme";
 import { Canvas, createCanvas } from "canvas";
@@ -109,7 +114,8 @@ export const renderCalendar = (
     for (const [idx, week] of calendar.weeks.entries()) {
         for (const day of week.contributionDays) {
             const value = iteratee(day);
-            const hexColor = "0x" + day.color.substring(1);
+            const level = contributionLevelToNumber(day.contributionLevel);
+            const hexColor = "0x" + theme.levelColors[level - 1];
             const cubeHeight = Math.floor(minHeight + heightMultiplier * value);
 
             const cube = getCube(

@@ -9,8 +9,7 @@
         "deps:update": "pnpm up -irL",
         "dev": "next dev",
         "lint": "next lint",
-        "start": "next start",
-        "vercel-build": "yum install libuuid-devel libmount-devel zlib wget && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/ && npm run build"
+        "start": "next start"
     },
     "dependencies": {
         "@radix-ui/react-icons": "^1.3.0",

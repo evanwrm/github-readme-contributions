@@ -21,7 +21,7 @@ registerFont(resolve(process.cwd(), "public/fonts", "Arial_Italic.ttf"), {
     style: "italic"
 });
 
-export const getContributions = unstable_cache(fetchContributions, undefined, { revalidate: 3600 });
+const getContributions = unstable_cache(fetchContributions, undefined, { revalidate: 3600 });
 
 export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
