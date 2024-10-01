@@ -1,0 +1,52 @@
+# Emacs backup files
+*~
+*#
+.#*
+# Vim file artifacts
+.*.sw*
+
+# local env files
+.env*.local
+
+# debug
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# vendor
+vendor/
+.vscode
+.gradle
+.idea
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# build output
+dist/
+build/
+target/
+
+# next.js
+/.next/
+/out/
+
+# misc
+.DS_Store
+*.pem
+.project
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
