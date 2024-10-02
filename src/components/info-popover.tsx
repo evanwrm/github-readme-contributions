@@ -1,3 +1,5 @@
+"use client";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";

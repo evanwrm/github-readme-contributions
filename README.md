@@ -3,7 +3,11 @@
     <p align="center">Get dynamically generated GitHub contribution charts in your readmes!</p>
 </p>
 
-[![Evan's GitHub contributions](https://github-readme-contributions.vercel.app/api/iso?username=evanwrm)](https://github-readme-contributions.vercel.app)
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github-readme-contributions.vercel.app/api/iso?username=evanwrm&theme=winter-dark">
+    <source media="(prefers-color-scheme: light)" srcset="https://github-readme-contributions.vercel.app/api/iso?username=evanwrm&theme=winter">
+    <img alt="GitHub contributions" src="https://github-readme-contributions.vercel.app/api/iso?username=evanwrm&theme=winter">
+</picture>
 
 ## Getting Started
 

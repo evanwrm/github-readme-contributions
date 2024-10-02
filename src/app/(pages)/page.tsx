@@ -1,5 +1,4 @@
-"use client";
-
+import { CodeBlock } from "@/components/code-block";
 import { CopyButton } from "@/components/copy-button";
 import { InfoPopover } from "@/components/info-popover";
 import { Preview } from "@/components/preview";
@@ -13,6 +12,8 @@ const generateUrl = (params = {}) => {
     const searchParams = new URLSearchParams(params);
     return `${env.NEXT_PUBLIC_SITE_URL}/api/iso?${searchParams.toString()}`;
 };
+const demoLight = generateUrl({ username: "evanwrm", theme: "light" });
+const demoDark = generateUrl({ username: "evanwrm", theme: "dark" });
 
 export default function Home() {
     return (
@@ -100,13 +101,28 @@ export default function Home() {
                                 bgColor: "00000000"
                             });
                             return (
-                                <div className="relative mt-2">
+                                <div key={name} className="relative mt-2">
                                     <PreviewImage src={url} />
                                     <CopyButton text={url} className="right-2 top-2" />
                                 </div>
                             );
                         })}
                     </div>
+                </div>
+                <div className="mt-4">
+                    <p>
+                        If you want to change the image based on the users color preference, you can
+                        use:
+                    </p>
+                    <CodeBlock
+                        code={`<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="${demoDark}">
+    <source media="(prefers-color-scheme: light)" srcset="${demoLight}">
+    <img alt="GitHub contributions" src="${demoLight}">
+</picture>`}
+                        lang="html"
+                        className="mt-2"
+                    />
                 </div>
             </section>
         </div>
