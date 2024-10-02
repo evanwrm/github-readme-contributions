@@ -18,11 +18,11 @@ export interface RenderOptions {
     username?: string;
     theme: Theme;
 }
-export const renderContributions = (
+export function renderContributions(
     canvas: Canvas,
     contributions: GithubContributions,
     { theme }: RenderOptions
-) => {
+) {
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = `#${theme.bgColor}`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -100,40 +100,35 @@ export const renderContributions = (
     ctx.fillText(" / day", 915 + avgerageTextMetrics.width, 150);
 
     return canvas;
-};
+}
 
-export const renderCalendar = (
+export function renderCalendar(
     canvas: Canvas,
     calendar: ContributionCalendar,
     iteratee: (value: ContributionDay) => number,
     theme: Theme = defaultTheme,
     heightMultiplier: number = 1,
     minHeight: number = 3
-) => {
+) {
     const pixelView = new iso.PixelView(canvas as any, new iso.Point(130, 90));
-    const hexBorderColor = "0x" + theme.borderColor;
     for (const [idx, week] of calendar.weeks.entries()) {
         for (const day of week.contributionDays) {
             const value = iteratee(day);
             const level = contributionLevelToNumber(day.contributionLevel);
-            const hexColor = "0x" + theme.levelColors[level - 1];
+            const hexColor = "0x" + theme.levelColors[level];
             const cubeHeight = Math.floor(minHeight + heightMultiplier * value);
 
-            const cube = getCube(
-                ISO_DAY_SIZE,
-                cubeHeight,
-                value > 0 ? parseInt(hexColor) : parseInt(hexBorderColor)
-            );
+            const cube = getCube(ISO_DAY_SIZE, cubeHeight, parseInt(hexColor));
             const point3d = new iso.Point3D(ISO_DAY_SIZE * idx, ISO_DAY_SIZE * day.weekday);
 
             pixelView.renderObject(cube, point3d);
         }
     }
-};
+}
 
-const createCube = (size: number, height: number, color: number) => {
+function createCube(size: number, height: number, color: number) {
     const dimension = new iso.CubeDimension(size, size, height);
     const cubeColor = new iso.CubeColor().getByHorizontalColor(color);
     return new iso.Cube(dimension, cubeColor, false);
-};
+}
 const getCube = nanomemoize(createCube, { maxAge: 86400000 });

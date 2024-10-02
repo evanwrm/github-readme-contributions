@@ -47,6 +47,8 @@ export class BitmapData {
 
     constructor(w: number, h: number) {
         this.canvas = CanvasManager.createCanvas();
+        this.canvas.width = w;
+        this.canvas.height = h;
         this.context = getContext(this.canvas);
         this.imageData = this.context.createImageData(w, h);
     }

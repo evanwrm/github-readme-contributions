@@ -5,7 +5,6 @@ export interface Theme {
     title: string;
     description: string;
     bgColor: string;
-    borderColor: string;
     levelColors: string[];
     titleColor: string;
     textColor: string;
@@ -19,8 +18,7 @@ export const themes = [
         title: "Light",
         description: "Default light theme",
         bgColor: "fffefe",
-        borderColor: "ebedf0",
-        levelColors: ["9be9a8", "30c463", "30a14e", "216e39"],
+        levelColors: ["ebedf0", "9be9a8", "30c463", "30a14e", "216e39"],
         titleColor: "24292f",
         textColor: "24292f",
         metricsColor: "1a7f37"
@@ -30,8 +28,7 @@ export const themes = [
         title: "Dark",
         description: "Dark mode theme",
         bgColor: "151515",
-        borderColor: "292929",
-        levelColors: ["0e4429", "006d32", "26a641", "39d353"],
+        levelColors: ["161b22 ", "0e4429", "006d32", "26a641", "39d353"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
         metricsColor: "1a7f37"
@@ -41,8 +38,7 @@ export const themes = [
         title: "Halloween",
         description: "Halloween theme",
         bgColor: "fffefe",
-        borderColor: "ebedf0",
-        levelColors: ["ffee4a", "ffc501", "fe9600", "03001c"],
+        levelColors: ["ebedf0", "ffee4a", "ffc501", "fe9600", "03001c"],
         titleColor: "24292f",
         textColor: "24292f",
         metricsColor: "fe9600"
@@ -52,8 +48,7 @@ export const themes = [
         title: "Halloween Dark",
         description: "Halloween theme dark mode",
         bgColor: "151515",
-        borderColor: "292929",
-        levelColors: ["631c03", "bd561d", "fa7a18", "fddf68"],
+        levelColors: ["161b22", "631c03", "bd561d", "fa7a18", "fddf68"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
         metricsColor: "fe9600"
@@ -63,8 +58,7 @@ export const themes = [
         title: "Winter",
         description: "Winter theme",
         bgColor: "fffefe",
-        borderColor: "ebedf0",
-        levelColors: ["b6e3ff", "54aeff", "0969da", "0a3069"],
+        levelColors: ["ebedf0", "b6e3ff", "54aeff", "0969da", "0a3069"],
         titleColor: "24292f",
         textColor: "24292f",
         metricsColor: "0969da"
@@ -74,8 +68,7 @@ export const themes = [
         title: "Winter Dark",
         description: "Winter theme dark mode",
         bgColor: "151515",
-        borderColor: "292929",
-        levelColors: ["0a3069", "0969da", "54aeff", "b6e3ff"],
+        levelColors: ["161b22", "0a3069", "0969da", "54aeff", "b6e3ff"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
         metricsColor: "0969da"
@@ -85,8 +78,7 @@ export const themes = [
         title: "Valentine",
         description: "Valentine's Day theme",
         bgColor: "fffefe",
-        borderColor: "ebedf0",
-        levelColors: ["ffcfe9", "ff9bce", "ff69b4", "ff1493"],
+        levelColors: ["ebedf0", "ffcfe9", "ff9bce", "ff69b4", "ff1493"],
         titleColor: "24292f",
         textColor: "24292f",
         metricsColor: "ff69b4"
@@ -96,8 +88,7 @@ export const themes = [
         title: "Valentine Dark",
         description: "Valentine's Day theme dark mode",
         bgColor: "151515",
-        borderColor: "292929",
-        levelColors: ["4a0e29", "6d0032", "a62641", "d35373"],
+        levelColors: ["161b22", "4a0e29", "6d0032", "a62641", "d35373"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
         metricsColor: "ff69b4"

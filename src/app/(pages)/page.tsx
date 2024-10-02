@@ -61,10 +61,6 @@ export default function Home() {
                                 fffefe)
                             </li>
                             <li>
-                                <strong>borderColor</strong> - Border color in hex format (e.g.,
-                                ebedf0)
-                            </li>
-                            <li>
                                 <strong>titleColor</strong> - Title color in hex format (e.g.,
                                 24292f)
                             </li>

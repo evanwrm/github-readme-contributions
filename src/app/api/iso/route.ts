@@ -30,7 +30,6 @@ const paramsSchema = z.object({
     username: z.string(),
     theme: z.string().optional(),
     bgColor: z.string().regex(hexRegex).optional(),
-    borderColor: z.string().regex(hexRegex).optional(),
     titleColor: z.string().regex(hexRegex).optional(),
     textColor: z.string().regex(hexRegex).optional(),
     metricsColor: z.string().regex(hexRegex).optional()
@@ -40,22 +39,8 @@ export async function GET(req: NextRequest) {
     const { success, data } = paramsSchema.safeParse(Object.fromEntries(req.nextUrl.searchParams));
     if (!success) return new Response("Invalid parameters", { status: 400 });
 
-    const {
-        username,
-        theme: rawTheme = "",
-        bgColor,
-        borderColor,
-        titleColor,
-        textColor,
-        metricsColor
-    } = data;
-    const theme = merge(getTheme(rawTheme), {
-        bgColor,
-        borderColor,
-        titleColor,
-        textColor,
-        metricsColor
-    });
+    const { username, theme: rawTheme = "", bgColor, titleColor, textColor, metricsColor } = data;
+    const theme = merge(getTheme(rawTheme), { bgColor, titleColor, textColor, metricsColor });
 
     if (!username) return new Response("No username found", { status: 404 });
 

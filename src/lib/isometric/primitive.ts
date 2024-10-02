@@ -115,21 +115,28 @@ export class Cube extends Primitive {
         color: Color = new CubeColor(),
         border: boolean = true
     ) {
-        super();
+        let w = dimension.xAxis + dimension.yAxis;
+        let h = dimension.zAxis + (dimension.xAxis + dimension.yAxis) / 2;
+        // Adjust for 22.6 degrees implementation
+        w = w - 2;
+        h = h - 1;
+
+        const bmp = new BitmapData(w, h);
+
+        super(bmp.canvas, bmp.context);
 
         this.dimension = dimension;
         this.color = color;
         this.border = border;
 
-        this.w = this.dimension.xAxis + this.dimension.yAxis;
-        this.h = this.dimension.zAxis + (this.dimension.xAxis + this.dimension.yAxis) / 2;
-        // Adjust for 22.6 degrees implementation
-        this.w -= 2;
-        this.h -= 1;
+        this.w = w;
+        this.h = h;
 
         // Initialize matrix with offsets
         this.matrix.tx = -this.dimension.yAxis + 2;
         this.matrix.ty = -this.dimension.zAxis;
+
+        this.bitmapData = bmp;
 
         if (!this.dimension || !this.color) throw new Error("Missing properties for build.");
 
