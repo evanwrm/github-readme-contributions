@@ -31,7 +31,8 @@ export const renderContributions = (
     const stats = calculateStats(contributions);
 
     // Render calendar
-    renderCalendar(canvas, calendar, d => d.contributionCount, theme, ISO_MAX_HEIGHT / stats.best);
+    const heightMultiplier = stats.best > 0 ? ISO_MAX_HEIGHT / stats.best : 1;
+    renderCalendar(canvas, calendar, d => d.contributionCount, theme, heightMultiplier);
 
     ctx.font = `600 14px ${STAT_FONT}`;
     ctx.fillStyle = `#${theme.titleColor}`;
@@ -121,7 +122,7 @@ export const renderCalendar = (
             const cube = getCube(
                 ISO_DAY_SIZE,
                 cubeHeight,
-                value ? parseInt(hexColor) : parseInt(hexBorderColor)
+                value > 0 ? parseInt(hexColor) : parseInt(hexBorderColor)
             );
             const point3d = new iso.Point3D(ISO_DAY_SIZE * idx, ISO_DAY_SIZE * day.weekday);
 

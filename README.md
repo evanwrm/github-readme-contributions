@@ -25,4 +25,3 @@ This project was inspired by [jasonlong/isometric-contributions](https://github.
 
 -   [ ] Add more themes
 -   [ ] Speed up the rendering
--   [ ] fix octocat failure
