@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 interface InfoPopoverProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     className?: string;
 }
 
@@ -19,7 +19,7 @@ export const InfoPopover = ({ children, className }: InfoPopoverProps) => {
             <PopoverContent
                 side={isDesktop ? "right" : "bottom"}
                 align="center"
-                className={cn("w-64 p-2", className)}
+                className={cn("w-64 p-2 text-sm", className)}
             >
                 {children}
             </PopoverContent>

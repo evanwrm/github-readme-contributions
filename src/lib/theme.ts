@@ -1,3 +1,5 @@
+import { cloneDeep } from "lodash-es";
+
 export interface Theme {
     name: string;
     title: string;
@@ -28,28 +30,6 @@ export const themes = [
         title: "Dark",
         description: "Dark mode theme",
         bgColor: "151515",
-        borderColor: "292929",
-        levelColors: ["0e4429", "006d32", "26a641", "39d353"],
-        titleColor: "c9d1d9",
-        textColor: "c9d1d9",
-        metricsColor: "1a7f37"
-    },
-    {
-        name: "transparent",
-        title: "Transparent",
-        description: "Transparent background",
-        bgColor: "00000000",
-        borderColor: "ebedf0",
-        levelColors: ["9be9a8", "30c463", "30a14e", "216e39"],
-        titleColor: "24292f",
-        textColor: "24292f",
-        metricsColor: "1a7f37"
-    },
-    {
-        name: "transparent-dark",
-        title: "Transparent Dark",
-        description: "Transparent background dark mode theme",
-        bgColor: "00000000",
         borderColor: "292929",
         levelColors: ["0e4429", "006d32", "26a641", "39d353"],
         titleColor: "c9d1d9",
@@ -126,5 +106,6 @@ export const themes = [
 export const defaultTheme: Theme = themes[0];
 
 export const getTheme = (name?: string): Theme => {
-    return themes.find(theme => theme.name === name) ?? defaultTheme;
+    const theme = themes.find(theme => theme.name === name) ?? defaultTheme;
+    return cloneDeep(theme);
 };

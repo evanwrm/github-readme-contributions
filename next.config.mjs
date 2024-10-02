@@ -4,7 +4,12 @@
 const baseConfig = {
     poweredByHeader: false,
     reactStrictMode: true,
-    swcMinify: true
+    swcMinify: true,
+    images: {
+        loader: "default",
+        formats: ["image/avif", "image/webp"],
+        remotePatterns: [{ hostname: "localhost" }]
+    }
 };
 
 export default baseConfig;

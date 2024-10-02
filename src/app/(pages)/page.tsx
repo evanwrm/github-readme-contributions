@@ -1,10 +1,18 @@
 "use client";
 
+import { CopyButton } from "@/components/copy-button";
 import { InfoPopover } from "@/components/info-popover";
 import { Preview } from "@/components/preview";
+import { PreviewImage } from "@/components/preview-image";
 import { ThemeSwatch } from "@/components/theme-swatch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { env } from "@/lib/env/client.mjs";
 import { themes } from "@/lib/theme";
+
+const generateUrl = (params = {}) => {
+    const searchParams = new URLSearchParams(params);
+    return `${env.NEXT_PUBLIC_SITE_URL}/api/iso?${searchParams.toString()}`;
+};
 
 export default function Home() {
     return (
@@ -37,6 +45,25 @@ export default function Home() {
                             <li>
                                 <strong>theme</strong> - The theme name (e.g., dark, halloween)
                             </li>
+                            <li>
+                                <strong>bgColor</strong> - Background color in hex format (e.g.,
+                                fffefe)
+                            </li>
+                            <li>
+                                <strong>borderColor</strong> - Border color in hex format (e.g.,
+                                ebedf0)
+                            </li>
+                            <li>
+                                <strong>titleColor</strong> - Title color in hex format (e.g.,
+                                24292f)
+                            </li>
+                            <li>
+                                <strong>textColor</strong> - Text color in hex format (e.g., 24292f)
+                            </li>
+                            <li>
+                                <strong>metricsColor</strong> - Metrics color in hex format (e.g.,
+                                1a7f37)
+                            </li>
                         </ul>
                     </TabsContent>
                     <TabsContent value="themes" className="mt-4 space-y-4">
@@ -56,6 +83,31 @@ export default function Home() {
                         </ul>
                     </TabsContent>
                 </Tabs>
+            </section>
+            <section className="mx-auto w-full max-w-screen-lg p-4">
+                <h2 className="text-2xl font-bold">Examples</h2>
+                <div className="mt-4">
+                    <p>
+                        You can generate contribution charts with transparent backgrounds by setting
+                        the bgColor parameter to{" "}
+                        <code className="rounded-md bg-accent p-1">00000000</code>:{" "}
+                    </p>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        {["light", "dark", "winter", "winter-dark"].map(name => {
+                            const url = generateUrl({
+                                username: "evanwrm",
+                                theme: name,
+                                bgColor: "00000000"
+                            });
+                            return (
+                                <div className="relative mt-2">
+                                    <PreviewImage src={url} />
+                                    <CopyButton text={url} className="right-2 top-2" />
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
             </section>
         </div>
     );

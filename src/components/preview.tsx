@@ -1,7 +1,8 @@
 "use client";
 
 import { BlurInput } from "@/components/blur-input";
-import { Button } from "@/components/ui/button";
+import { InfoPopover } from "@/components/info-popover";
+import { PreviewImage } from "@/components/preview-image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -14,9 +15,16 @@ import {
 import { env } from "@/lib/env/client.mjs";
 import { themes } from "@/lib/theme";
 import { cn } from "@/lib/utils";
-import { CopyIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { toast } from "sonner";
+import { CopyButton } from "./copy-button";
+
+const generateUrl = (params = {}) => {
+    const searchParams = new URLSearchParams(params);
+    return `${env.NEXT_PUBLIC_SITE_URL}/api/iso?${searchParams.toString()}`;
+};
+const generateMarkdownSnippet = (url: string) => {
+    return `[![GitHub contributions](${url})](${env.NEXT_PUBLIC_SITE_URL})`;
+};
 
 interface PreviewProps {
     className?: string;
@@ -26,14 +34,8 @@ export const Preview = ({ className }: PreviewProps) => {
     const [username, setUsername] = useState("evanwrm");
     const [theme, setTheme] = useState("dark");
 
-    const generateUrl = (params = {}) => {
-        const searchParams = new URLSearchParams({ username, theme, ...params });
-        return `${env.NEXT_PUBLIC_SITE_URL}/api/iso?${searchParams.toString()}`;
-    };
-
-    const copyClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
-        toast("Copied to clipboard");
+    const handleUsername = (username: string) => {
+        setUsername(username.trim());
     };
 
     return (
@@ -44,7 +46,7 @@ export const Preview = ({ className }: PreviewProps) => {
                     <BlurInput
                         id="username"
                         value={username}
-                        onValueChange={d => setUsername(d)}
+                        onValueChange={handleUsername}
                         placeholder="Enter your GitHub username"
                         className="mt-1"
                     />
@@ -67,30 +69,35 @@ export const Preview = ({ className }: PreviewProps) => {
             </div>
             <div>
                 <Label>Preview</Label>
-                <div className="mt-2 overflow-hidden rounded-lg border bg-background">
-                    <img src={generateUrl()} alt="GitHub Contributions" className="w-full" />
-                </div>
+                <PreviewImage src={generateUrl({ username, theme })} className="mt-2" />
             </div>
-            <div>
-                <Label>Markdown Code</Label>
-                <div className="relative mt-2 flex items-center">
-                    <Input
-                        readOnly
-                        value={`[![GitHub contributions](${generateUrl()})](${env.NEXT_PUBLIC_SITE_URL})`}
-                        className="h-12"
-                    />
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        className="absolute right-2"
-                        onClick={() =>
-                            copyClipboard(
-                                `[![GitHub contributions](${generateUrl()})](${env.NEXT_PUBLIC_SITE_URL})`
-                            )
-                        }
-                    >
-                        <CopyIcon className="h-4 w-4" />
-                    </Button>
+            <div className="flex flex-col gap-y-4 md:flex-row md:gap-x-4">
+                <div className="flex-1">
+                    <Label className="flex items-center">
+                        API Endpoint
+                        <InfoPopover>Image URL to use in your projects</InfoPopover>
+                    </Label>
+                    <div className="relative mt-2 flex items-center">
+                        <Input readOnly value={generateUrl({ username, theme })} className="h-12" />
+                        <CopyButton text={generateUrl({ username, theme })} className="right-2" />
+                    </div>
+                </div>
+                <div className="flex-1">
+                    <Label className="flex items-center">
+                        Markdown Code
+                        <InfoPopover>Markdown snippet to use in your GitHub readme</InfoPopover>
+                    </Label>
+                    <div className="relative mt-2 flex items-center">
+                        <Input
+                            readOnly
+                            value={generateMarkdownSnippet(generateUrl({ username, theme }))}
+                            className="h-12"
+                        />
+                        <CopyButton
+                            text={generateMarkdownSnippet(generateUrl({ username, theme }))}
+                            className="right-2"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
