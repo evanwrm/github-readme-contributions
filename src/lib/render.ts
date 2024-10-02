@@ -136,4 +136,4 @@ const createCube = (size: number, height: number, color: number) => {
     const cubeColor = new iso.CubeColor().getByHorizontalColor(color);
     return new iso.Cube(dimension, cubeColor, false);
 };
-const getCube = nanomemoize(createCube, { maxAge: 0 }); // 86400000
+const getCube = nanomemoize(createCube, { maxAge: 86400000 });

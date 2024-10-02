@@ -22,10 +22,15 @@ export class Primitive {
     bitmapData?: BitmapData;
     matrix: Matrix = new Matrix();
 
-    constructor() {
-        this.canvas = CanvasManager.createCanvas();
-        this.context = getContext(this.canvas);
-        this.context.imageSmoothingEnabled = false;
+    constructor(canvas?: CanvasType, context?: Context2DType) {
+        if (canvas && context) {
+            this.canvas = canvas;
+            this.context = context;
+        } else {
+            this.canvas = CanvasManager.createCanvas();
+            this.context = getContext(this.canvas);
+            this.context.imageSmoothingEnabled = false;
+        }
     }
 }
 
@@ -35,31 +40,31 @@ export class Brick extends Primitive {
         color: Color = new SideColor(),
         border: boolean = true
     ) {
-        super();
+        if (!dimension) throw new Error("Dimension is not defined.");
+
+        let w = dimension.xAxis + dimension.yAxis;
+        let h = (dimension.xAxis + dimension.yAxis) / 2;
+        // Adjust for 22.6 degrees implementation
+        w = w - 2;
+        h = h - 1;
+
+        const bmp = new BitmapData(w, h);
+
+        super(bmp.canvas, bmp.context);
+
         this.dimension = dimension;
         this.color = color;
         this.border = border;
 
-        if (!this.dimension) throw new Error("Dimension is not defined.");
-
-        this.w = this.dimension.xAxis + this.dimension.yAxis;
-        this.h = (this.dimension.xAxis + this.dimension.yAxis) / 2;
-
-        // Adjust for 22.6 degrees implementation
-        this.w -= 2;
-        this.h -= 1;
+        this.w = w;
+        this.h = h;
 
         // Initialize matrix with offsets
         this.matrix.tx = -this.dimension.yAxis + 2;
         this.matrix.ty = 0;
 
-        this.bitmapData = new BitmapData(this.w, this.h);
+        this.bitmapData = bmp;
 
-        this.build();
-        this.renderBitmapData();
-    }
-
-    private build(): void {
         if (!this.dimension || !this.bitmapData || !this.color)
             throw new Error("Missing properties for build.");
 
@@ -99,9 +104,7 @@ export class Brick extends Primitive {
             Math.floor((this.h ?? 0) / 2),
             this.color.inner!
         );
-    }
 
-    private renderBitmapData(): void {
         this.bitmapData?.render(this.context);
     }
 }
@@ -113,13 +116,13 @@ export class Cube extends Primitive {
         border: boolean = true
     ) {
         super();
+
         this.dimension = dimension;
         this.color = color;
         this.border = border;
 
         this.w = this.dimension.xAxis + this.dimension.yAxis;
         this.h = this.dimension.zAxis + (this.dimension.xAxis + this.dimension.yAxis) / 2;
-
         // Adjust for 22.6 degrees implementation
         this.w -= 2;
         this.h -= 1;
@@ -128,15 +131,7 @@ export class Cube extends Primitive {
         this.matrix.tx = -this.dimension.yAxis + 2;
         this.matrix.ty = -this.dimension.zAxis;
 
-        this.bitmapData = new BitmapData(this.w, this.h);
-
-        this.build();
-        this.renderBitmapData();
-    }
-
-    private build(): void {
-        if (!this.dimension || !this.bitmapData || !this.color)
-            throw new Error("Missing properties for build.");
+        if (!this.dimension || !this.color) throw new Error("Missing properties for build.");
 
         // Create Brick (front face)
         const brick = new Brick(
@@ -213,10 +208,6 @@ export class Cube extends Primitive {
         // Render the highlights onto the bitmapData context
         bmd.render(this.context);
     }
-
-    private renderBitmapData(): void {
-        this.bitmapData?.render(this.context);
-    }
 }
 
 export class SideX extends Primitive {
@@ -225,26 +216,27 @@ export class SideX extends Primitive {
         color: SideColor = new SideColor(),
         border: boolean = true
     ) {
-        super();
+        const w = dimension.xAxis;
+        const h = dimension.zAxis + dimension.xAxis / 2;
+
+        const bmp = new BitmapData(w, h);
+
+        super(bmp.canvas, bmp.context);
+
         this.dimension = dimension;
         this.color = color;
         this.border = border;
 
-        this.w = this.dimension.xAxis;
-        this.h = this.dimension.zAxis + this.dimension.xAxis / 2;
+        this.w = w;
+        this.h = h;
 
         // Initialize matrix with offsets
         this.matrix = new Matrix();
         this.matrix.tx = 0;
         this.matrix.ty = -this.dimension.zAxis;
 
-        this.bitmapData = new BitmapData(this.w, this.h);
+        this.bitmapData = bmp;
 
-        this.build();
-        this.renderBitmapDataForCanvas();
-    }
-
-    private build(): void {
         if (!this.dimension || !this.bitmapData || !this.color)
             throw new Error("Missing properties for build.");
 
@@ -276,9 +268,7 @@ export class SideX extends Primitive {
             Math.floor(this.h / 2),
             this.color.inner!
         );
-    }
 
-    private renderBitmapDataForCanvas(): void {
         this.bitmapData?.render(this.context);
     }
 }
@@ -289,26 +279,27 @@ export class SideY extends Primitive {
         color: SideColor = new SideColor(),
         border: boolean = true
     ) {
-        super();
+        const w = dimension.yAxis;
+        const h = dimension.zAxis + dimension.yAxis / 2;
+
+        const bmp = new BitmapData(w, h);
+
+        super(bmp.canvas, bmp.context);
+
         this.dimension = dimension;
         this.color = color;
         this.border = border;
 
-        this.w = this.dimension.yAxis;
-        this.h = this.dimension.zAxis + this.dimension.yAxis / 2;
+        this.w = w;
+        this.h = h;
 
         // Initialize matrix with offsets
         this.matrix = new Matrix();
         this.matrix.tx = -this.dimension.yAxis + 2;
         this.matrix.ty = -this.dimension.zAxis;
 
-        this.bitmapData = new BitmapData(this.w, this.h);
+        this.bitmapData = bmp;
 
-        this.build();
-        this.renderBitmapDataForCanvas();
-    }
-
-    private build(): void {
         if (!this.dimension || !this.bitmapData || !this.color)
             throw new Error("Missing properties for build.");
 
@@ -340,9 +331,7 @@ export class SideY extends Primitive {
             Math.floor(this.h / 2),
             this.color.inner!
         );
-    }
 
-    private renderBitmapDataForCanvas(): void {
         this.bitmapData?.render(this.context);
     }
 }
