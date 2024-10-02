@@ -1,5 +1,6 @@
 "use client";
 
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 
@@ -16,6 +17,7 @@ export const RootProviders = ({ children }: Props) => {
             disableTransitionOnChange
         >
             <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
+            <Toaster />
         </ThemeProvider>
     );
 };

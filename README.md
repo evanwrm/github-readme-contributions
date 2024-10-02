@@ -16,3 +16,9 @@ pnpm dev
 ## Acknowledgements
 
 This project was inspired by [jasonlong/isometric-contributions](https://github.com/jasonlong/isometric-contributions)
+
+## TODO
+
+-   [ ] Add more themes
+-   [ ] Speed up the rendering
+-   [ ] fix octocat failure

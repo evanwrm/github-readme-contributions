@@ -123,11 +123,7 @@ export const renderCalendar = (
                 cubeHeight,
                 value ? parseInt(hexColor) : parseInt(hexBorderColor)
             );
-            const point3d = new iso.Point3D(
-                ISO_DAY_SIZE * idx,
-                ISO_DAY_SIZE * day.weekday,
-                value > 0 ? minHeight : 0
-            );
+            const point3d = new iso.Point3D(ISO_DAY_SIZE * idx, ISO_DAY_SIZE * day.weekday);
 
             pixelView.renderObject(cube, point3d);
         }
@@ -139,4 +135,4 @@ const createCube = (size: number, height: number, color: number) => {
     const cubeColor = new iso.CubeColor().getByHorizontalColor(color);
     return new iso.Cube(dimension, cubeColor, false);
 };
-const getCube = nanomemoize(createCube, { maxAge: 86400000 });
+const getCube = nanomemoize(createCube, { maxAge: 0 }); // 86400000
