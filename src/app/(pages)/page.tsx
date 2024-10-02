@@ -1,4 +1,3 @@
-import { CodeBlock } from "@/components/code-block";
 import { CopyButton } from "@/components/copy-button";
 import { InfoPopover } from "@/components/info-popover";
 import { Preview } from "@/components/preview";
@@ -7,13 +6,24 @@ import { ThemeSwatch } from "@/components/theme-swatch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { env } from "@/lib/env/client.mjs";
 import { themes } from "@/lib/theme";
+import dynamic from "next/dynamic";
+
+const CodeBlock = dynamic(() => import("@/components/code-block").then(m => m.CodeBlock), {
+    ssr: false
+});
 
 const generateUrl = (params = {}) => {
     const searchParams = new URLSearchParams(params);
     return `${env.NEXT_PUBLIC_SITE_URL}/api/iso?${searchParams.toString()}`;
 };
+
 const demoLight = generateUrl({ username: "evanwrm", theme: "light" });
 const demoDark = generateUrl({ username: "evanwrm", theme: "dark" });
+const demoMediaQuery = `<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="${demoDark}">
+    <source media="(prefers-color-scheme: light)" srcset="${demoLight}">
+    <img alt="GitHub contributions" src="${demoLight}">
+</picture>`;
 
 export default function Home() {
     return (
@@ -114,15 +124,7 @@ export default function Home() {
                         If you want to change the image based on the users color preference, you can
                         use:
                     </p>
-                    <CodeBlock
-                        code={`<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="${demoDark}">
-    <source media="(prefers-color-scheme: light)" srcset="${demoLight}">
-    <img alt="GitHub contributions" src="${demoLight}">
-</picture>`}
-                        lang="html"
-                        className="mt-2"
-                    />
+                    <CodeBlock code={demoMediaQuery} lang="html" className="mt-2" />
                 </div>
             </section>
         </div>

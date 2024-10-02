@@ -27,7 +27,7 @@ export const CodeBlock = ({ code, lang, className }: CodeBlockProps) => {
         <div className={cn("relative", className)}>
             <div
                 dangerouslySetInnerHTML={{ __html: html }}
-                className="[&>pre]:scrollbar [&>pre]:overflow-auto [&>pre]:rounded-md [&>pre]:p-2"
+                className="[&>pre]:scrollbar [&>pre]:overflow-auto [&>pre]:rounded-md [&>pre]:p-4"
             />
             <CopyButton text={code} className="right-2 top-2" />
         </div>
