@@ -9,7 +9,8 @@ const baseConfig = {
         loader: "default",
         formats: ["image/avif", "image/webp"],
         remotePatterns: [{ hostname: "localhost" }]
-    }
+    },
+    experimental: { serverComponentsExternalPackages: ["@napi-rs/canvas"] }
 };
 
 export default baseConfig;

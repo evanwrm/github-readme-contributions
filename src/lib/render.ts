@@ -9,7 +9,7 @@ import {
 } from "@/lib/github";
 import { isometrics } from "@/lib/isometric";
 import { Theme, defaultTheme } from "@/lib/theme";
-import { Canvas, createCanvas } from "canvas";
+import { Canvas, createCanvas } from "@napi-rs/canvas";
 import nanomemoize from "nano-memoize";
 
 const iso = isometrics(() => createCanvas(1000, 600) as any);

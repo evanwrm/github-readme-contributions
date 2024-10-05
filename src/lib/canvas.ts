@@ -1,5 +1,5 @@
 import { CanvasType, Context2DType } from "@/lib/isometric/utils";
-import { CanvasRenderingContext2D } from "canvas";
+import { SKRSContext2D } from "@napi-rs/canvas";
 
 export const getPixel = (imageData: ImageData, x: number, y: number) => {
     const data = imageData.data;
@@ -22,7 +22,7 @@ interface RoundRectRadius {
     bl: number;
 }
 export const roundRect = (
-    ctx: CanvasRenderingContext2D,
+    ctx: SKRSContext2D,
     x: number,
     y: number,
     width: number,

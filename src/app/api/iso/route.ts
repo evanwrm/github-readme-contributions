@@ -1,27 +1,36 @@
 import { fetchContributions } from "@/lib/contributions";
 import { renderContributions } from "@/lib/render";
 import { getTheme } from "@/lib/theme";
-import { createCanvas, registerFont } from "canvas";
+import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 import { merge } from "lodash-es";
 import { unstable_cache } from "next/cache";
 import { NextRequest } from "next/server";
 import { resolve } from "path";
 import { z } from "zod";
 
-registerFont(resolve(process.cwd(), "public/fonts", "Arial.ttf"), { family: "Arial" });
-registerFont(resolve(process.cwd(), "public/fonts", "Arial_Bold.ttf"), {
-    family: "Arial",
-    weight: "bold"
-});
-registerFont(resolve(process.cwd(), "public/fonts", "Arial_Bold_Italic.ttf"), {
-    family: "Arial",
-    weight: "bold",
-    style: "italic"
-});
-registerFont(resolve(process.cwd(), "public/fonts", "Arial_Italic.ttf"), {
-    family: "Arial",
-    style: "italic"
-});
+const fonts = [
+    { path: resolve(process.cwd(), "public/fonts", "Arial.ttf"), family: "Arial" },
+    {
+        path: resolve(process.cwd(), "public/fonts", "Arial_Bold.ttf"),
+        family: "Arial",
+        weight: "bold"
+    },
+    {
+        path: resolve(process.cwd(), "public/fonts", "Arial_Bold_Italic.ttf"),
+        family: "Arial",
+        weight: "bold",
+        style: "italic"
+    },
+    {
+        path: resolve(process.cwd(), "public/fonts", "Arial_Italic.ttf"),
+        family: "Arial",
+        style: "italic"
+    }
+];
+for (const { path, family } of fonts) {
+    // registerFont(path, { family, weight, style });
+    GlobalFonts.registerFromPath(path, family);
+}
 
 const getContributions = unstable_cache(fetchContributions, undefined, { revalidate: 3600 });
 
@@ -48,7 +57,7 @@ export async function GET(req: NextRequest) {
 
     const canvas = createCanvas(1000, 600);
     renderContributions(canvas, contributions, { username, theme });
-    const buffer = canvas.toBuffer();
+    const buffer = canvas.toBuffer("image/png");
 
     return new Response(buffer, {
         headers: {

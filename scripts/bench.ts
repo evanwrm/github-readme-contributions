@@ -1,7 +1,8 @@
 import { fetchContributions } from "@/lib/contributions";
 import { renderContributions } from "@/lib/render";
 import { getTheme } from "@/lib/theme";
-import { createCanvas } from "canvas";
+import { createCanvas } from "@napi-rs/canvas";
+import { performance } from "perf_hooks";
 
 /**
  * Benchmarks rendering of contributions.
@@ -11,14 +12,22 @@ import { createCanvas } from "canvas";
  * Then open Chrome and go to chrome://inspect
  */
 
-const username = "evanwrm";
+const username = "levelsio"; // evanwrm
 const theme = getTheme("dark");
 
 const main = async () => {
+    const niterations = process.argv[2] ? parseInt(process.argv[2]) : 1;
+
     const contributions = await fetchContributions(username);
 
-    const canvas = createCanvas(1000, 600);
-    renderContributions(canvas, contributions, { username, theme });
+    const start = performance.now();
+    for (let i = 0; i < niterations; i++) {
+        const canvas = createCanvas(1000, 600);
+        renderContributions(canvas, contributions, { username, theme });
+    }
+    const end = performance.now();
+
+    console.log(`Rendered ${niterations} contributions in ${end - start}ms`);
 };
 
 main();
