@@ -69,8 +69,8 @@ dependencies:
     specifier: ^1.5.0
     version: 1.5.0(react-dom@18.3.1)(react@18.3.1)
   tailwind-merge:
-    specifier: ^2.5.2
-    version: 2.5.2
+    specifier: ^2.5.5
+    version: 2.5.5
   zod:
     specifier: ^3.23.8
     version: 3.23.8
@@ -4198,8 +4198,8 @@ packages:
       tslib: 2.7.0
     dev: true
 
-  /tailwind-merge@2.5.2:
-    resolution: {integrity: sha512-kjEBm+pvD+6eAwzJL2Bi+02/9LFLal1Gs61+QB7HvTfQQ0aXwC5LGT8PEt1gS0CWKktKe6ysPTAy3cBC5MeiIg==}
+  /tailwind-merge@2.5.5:
+    resolution: {integrity: sha512-0LXunzzAZzo0tEPxV3I297ffKZPlKDrjj7NXphC8V5ak9yHC5zRmxnOe2m/Rd/7ivsOMJe3JZ2JVocoDdQTRBA==}
     dev: false
 
   /tailwindcss-animate@1.0.7(tailwindcss@3.4.13):
