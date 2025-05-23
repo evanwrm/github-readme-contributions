@@ -1,3 +1,4 @@
+import { CodeBlock } from "@/components/code-block";
 import { CopyButton } from "@/components/copy-button";
 import { InfoPopover } from "@/components/info-popover";
 import { Preview } from "@/components/preview";
@@ -6,11 +7,7 @@ import { ThemeSwatch } from "@/components/theme-swatch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { env } from "@/lib/env/client.mjs";
 import { themes } from "@/lib/theme";
-import dynamic from "next/dynamic";
 
-const CodeBlock = dynamic(() => import("@/components/code-block").then(m => m.CodeBlock), {
-    ssr: false
-});
 
 const generateUrl = (params = {}) => {
     const searchParams = new URLSearchParams(params);

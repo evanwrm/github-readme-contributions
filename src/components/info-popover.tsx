@@ -3,7 +3,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Info } from "lucide-react";
 
 interface InfoPopoverProps {
     children?: React.ReactNode;
@@ -16,7 +16,7 @@ export const InfoPopover = ({ children, className }: InfoPopoverProps) => {
     return (
         <Popover>
             <PopoverTrigger>
-                <InfoCircledIcon className="ml-2 h-4 w-4" />
+                <Info className="ml-2 h-4 w-4" />
             </PopoverTrigger>
             <PopoverContent
                 side={isDesktop ? "right" : "bottom"}

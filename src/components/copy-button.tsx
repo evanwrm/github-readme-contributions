@@ -2,7 +2,7 @@
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { CopyIcon } from "@radix-ui/react-icons";
+import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 
@@ -27,7 +27,7 @@ export const CopyButton = ({ text, title = "Copy to clipboard", className }: Cop
                     className={cn("absolute", className)}
                     onClick={() => copyClipboard(text)}
                 >
-                    <CopyIcon className="h-4 w-4" />
+                    <Copy className="h-4 w-4" />
                 </Button>
             </TooltipTrigger>
             <TooltipContent>{title}</TooltipContent>

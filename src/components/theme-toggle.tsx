@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { DesktopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { MonitorCog, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -42,7 +42,7 @@ export const ThemeToggle = () => {
             <Tooltip>
                 <ToggleGroupItem value="dark" className="rounded-full" asChild>
                     <TooltipTrigger>
-                        <MoonIcon className="h-4 w-4" />
+                        <Moon className="h-4 w-4" />
                     </TooltipTrigger>
                 </ToggleGroupItem>
                 <TooltipContent>Dark</TooltipContent>
@@ -50,7 +50,7 @@ export const ThemeToggle = () => {
             <Tooltip>
                 <ToggleGroupItem value="light" className="rounded-full" asChild>
                     <TooltipTrigger>
-                        <SunIcon className="h-4 w-4" />
+                        <Sun className="h-4 w-4" />
                     </TooltipTrigger>
                 </ToggleGroupItem>
                 <TooltipContent>Light</TooltipContent>
@@ -58,7 +58,7 @@ export const ThemeToggle = () => {
             <Tooltip>
                 <ToggleGroupItem value="system" className="rounded-full" asChild>
                     <TooltipTrigger>
-                        <DesktopIcon className="h-4 w-4" />
+                        <MonitorCog className="h-4 w-4" />
                     </TooltipTrigger>
                 </ToggleGroupItem>
                 <TooltipContent>System</TooltipContent>
