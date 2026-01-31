@@ -21,7 +21,7 @@ export const themes = [
         levelColors: ["ebedf0", "9be9a8", "30c463", "30a14e", "216e39"],
         titleColor: "24292f",
         textColor: "24292f",
-        metricsColor: "1a7f37"
+        metricsColor: "1a7f37",
     },
     {
         name: "dark",
@@ -31,7 +31,7 @@ export const themes = [
         levelColors: ["161b22 ", "0e4429", "006d32", "26a641", "39d353"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
-        metricsColor: "1a7f37"
+        metricsColor: "1a7f37",
     },
     {
         name: "halloween",
@@ -41,7 +41,7 @@ export const themes = [
         levelColors: ["ebedf0", "ffee4a", "ffc501", "fe9600", "03001c"],
         titleColor: "24292f",
         textColor: "24292f",
-        metricsColor: "fe9600"
+        metricsColor: "fe9600",
     },
     {
         name: "halloween-dark",
@@ -51,7 +51,7 @@ export const themes = [
         levelColors: ["161b22", "631c03", "bd561d", "fa7a18", "fddf68"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
-        metricsColor: "fe9600"
+        metricsColor: "fe9600",
     },
     {
         name: "winter",
@@ -61,7 +61,7 @@ export const themes = [
         levelColors: ["ebedf0", "b6e3ff", "54aeff", "0969da", "0a3069"],
         titleColor: "24292f",
         textColor: "24292f",
-        metricsColor: "0969da"
+        metricsColor: "0969da",
     },
     {
         name: "winter-dark",
@@ -71,7 +71,7 @@ export const themes = [
         levelColors: ["161b22", "0a3069", "0969da", "54aeff", "b6e3ff"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
-        metricsColor: "0969da"
+        metricsColor: "0969da",
     },
     {
         name: "valentine",
@@ -81,7 +81,7 @@ export const themes = [
         levelColors: ["ebedf0", "ffcfe9", "ff9bce", "ff69b4", "ff1493"],
         titleColor: "24292f",
         textColor: "24292f",
-        metricsColor: "ff69b4"
+        metricsColor: "ff69b4",
     },
     {
         name: "valentine-dark",
@@ -91,8 +91,8 @@ export const themes = [
         levelColors: ["161b22", "4a0e29", "6d0032", "a62641", "d35373"],
         titleColor: "c9d1d9",
         textColor: "c9d1d9",
-        metricsColor: "ff69b4"
-    }
+        metricsColor: "ff69b4",
+    },
 ] as const satisfies Theme[];
 export const defaultTheme: Theme = themes[0];
 

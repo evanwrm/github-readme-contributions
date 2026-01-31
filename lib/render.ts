@@ -1,16 +1,16 @@
+import { type Canvas, createCanvas } from "@napi-rs/canvas";
+import nanomemoize from "nano-memoize";
 import { roundRect } from "@/lib/canvas";
 import { ISO_DAY_SIZE, ISO_MAX_HEIGHT, STAT_FONT } from "@/lib/constants";
 import { calculateStats } from "@/lib/contributions";
 import {
-    ContributionCalendar,
-    ContributionDay,
-    GithubContributions,
-    contributionLevelToNumber
+    type ContributionCalendar,
+    type ContributionDay,
+    contributionLevelToNumber,
+    type GithubContributions,
 } from "@/lib/github";
 import { isometrics } from "@/lib/isometric";
-import { Theme, defaultTheme } from "@/lib/theme";
-import { Canvas, createCanvas } from "@napi-rs/canvas";
-import nanomemoize from "nano-memoize";
+import { defaultTheme, type Theme } from "@/lib/theme";
 
 const iso = isometrics(() => createCanvas(1000, 600) as any);
 
@@ -21,7 +21,7 @@ export interface RenderOptions {
 export function renderContributions(
     canvas: Canvas,
     contributions: GithubContributions,
-    { theme }: RenderOptions
+    { theme }: RenderOptions,
 ) {
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = `#${theme.bgColor}`;
@@ -77,12 +77,12 @@ export function renderContributions(
             ? `${stats.bestStreakStart} → ${stats.bestStreakEnd}`
             : stats.bestStreakStart,
         65,
-        530
+        530,
     );
     ctx.fillText(
         stats.streak ? `${stats.streakStart} → ${stats.streakEnd}` : stats.streakStart,
         185,
-        530
+        530,
     );
 
     ctx.font = `12px ${STAT_FONT}`;
@@ -108,17 +108,17 @@ export function renderCalendar(
     iteratee: (value: ContributionDay) => number,
     theme: Theme = defaultTheme,
     heightMultiplier: number = 1,
-    minHeight: number = 3
+    minHeight: number = 3,
 ) {
     const pixelView = new iso.PixelView(canvas as any, new iso.Point(130, 90));
+    const parsedColors = getParsedColors(theme);
     for (const [idx, week] of calendar.weeks.entries()) {
         for (const day of week.contributionDays) {
             const value = iteratee(day);
             const level = contributionLevelToNumber(day.contributionLevel);
-            const hexColor = "0x" + theme.levelColors[level];
             const cubeHeight = Math.floor(minHeight + heightMultiplier * value);
 
-            const cube = getCube(ISO_DAY_SIZE, cubeHeight, parseInt(hexColor));
+            const cube = getCube(ISO_DAY_SIZE, cubeHeight, parsedColors[level]);
             const point3d = new iso.Point3D(ISO_DAY_SIZE * idx, ISO_DAY_SIZE * day.weekday);
 
             pixelView.renderObject(cube, point3d);
@@ -126,9 +126,15 @@ export function renderCalendar(
     }
 }
 
-function createCube(size: number, height: number, color: number) {
-    const dimension = new iso.CubeDimension(size, size, height);
-    const cubeColor = new iso.CubeColor().getByHorizontalColor(color);
-    return new iso.Cube(dimension, cubeColor, false);
-}
-const getCube = nanomemoize(createCube, { maxAge: 86400000 });
+const getParsedColors = nanomemoize((theme: Theme) => {
+    return theme.levelColors.map(c => parseInt(c.trim(), 16));
+});
+
+const getCube = nanomemoize(
+    (size: number, height: number, color: number) => {
+        const dimension = new iso.CubeDimension(size, size, height);
+        const cubeColor = new iso.CubeColor().getByHorizontalColor(color);
+        return new iso.Cube(dimension, cubeColor, false);
+    },
+    { maxAge: 86400000 },
+);

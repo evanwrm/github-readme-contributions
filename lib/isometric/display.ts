@@ -1,7 +1,7 @@
 import { getContext } from "@/lib/canvas";
 import { Point, Point3D } from "@/lib/isometric/geom";
-import { Primitive } from "@/lib/isometric/primitive";
-import { CanvasManager, CanvasType, Context2DType } from "@/lib/isometric/utils";
+import type { Primitive } from "@/lib/isometric/primitive";
+import { CanvasManager, type CanvasType, type Context2DType } from "@/lib/isometric/utils";
 
 export class PixelObject {
     canvas: CanvasType;
@@ -61,11 +61,6 @@ export class BitmapData {
         pixels[index + 3] = (color >>> 24) & 0xff; // Alpha
     }
 
-    private checkPixelAvailable(x: number, y: number): boolean {
-        const index = (y * this.imageData.width + x) * 4;
-        return this.imageData.data[index + 3] === 0;
-    }
-
     setPixel(posX: number, posY: number, color: number): void {
         const index = (posY * this.imageData.width + posX) * 4;
         this.setPixelByIndex(index, color);
@@ -76,187 +71,76 @@ export class BitmapData {
 
         const w = this.imageData.width;
         const h = this.imageData.height;
-        let x = posX;
-        let y = posY;
-        const stack: number[] = [];
-        let nowCol: number[] = [];
-        let prevCol: number[] = [];
-        let newStart: number;
-        let matchFlag: boolean;
-        let i: number, j: number;
+        const pixels = this.imageData.data;
 
-        if (x < 0 || y < 0 || x >= w || y >= h) return;
-        if (!this.checkPixelAvailable(x, y))
-            throw new Error("Start point for flood fill is already filled");
+        const r = (color >>> 16) & 0xff;
+        const g = (color >>> 8) & 0xff;
+        const b = color & 0xff;
+        const a = (color >>> 24) & 0xff;
 
-        // Left side flood fill
-        for (let col = x; col >= 0; col -= 1) {
-            // Top side
-            for (let row = y; row >= 0; row -= 1) {
-                if (this.checkPixelAvailable(col, row)) {
-                    stack.push((row * w + col) * 4);
-                    nowCol.push(row);
-                } else {
-                    if (row === y && this.checkPixelAvailable(col + 1, row - 1)) {
-                        if (this.checkPixelAvailable(col, row - 1)) {
-                            newStart = row - 1;
-                        } else if (this.checkPixelAvailable(col + 1, row - 2)) {
-                            newStart = row - 2;
-                        } else {
-                            newStart = -1;
-                        }
+        if (posX < 0 || posY < 0 || posX >= w || posY >= h) return;
 
-                        for (let r = newStart; r >= 0; r -= 1) {
-                            if (this.checkPixelAvailable(col, r)) {
-                                stack.push((r * w + col) * 4);
-                                nowCol.push(r);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                }
+        const startIdx = (posY * w + posX) * 4;
+        if (pixels[startIdx + 3] !== 0) return;
+
+        const visited = new Uint8Array(w * h);
+        const stack: number[] = [posX, posY];
+
+        while (stack.length > 0) {
+            const y = stack.pop();
+            let x = stack.pop();
+            if (x === undefined || y === undefined || y < 0 || y >= h) continue;
+
+            let key = y * w + x;
+            if (visited[key]) continue;
+
+            // Find left edge of this scanline
+            while (x > 0) {
+                const leftKey = y * w + (x - 1);
+                if (visited[leftKey] || pixels[leftKey * 4 + 3] !== 0) break;
+                x--;
             }
 
-            // Bottom side
-            for (let row = y; row < h; row += 1) {
-                if (this.checkPixelAvailable(col, row)) {
-                    stack.push((row * w + col) * 4);
-                    nowCol.push(row);
-                } else {
-                    if (row === y && this.checkPixelAvailable(col + 1, row + 1)) {
-                        if (this.checkPixelAvailable(col, row + 1)) {
-                            newStart = row + 1;
-                        } else if (this.checkPixelAvailable(col + 1, row + 2)) {
-                            newStart = row + 2;
-                        } else {
-                            newStart = h;
-                        }
+            // Fill scanline from left to right
+            let spanAbove = false;
+            let spanBelow = false;
 
-                        for (let r = newStart; r < h; r += 1) {
-                            if (this.checkPixelAvailable(col, r)) {
-                                stack.push((r * w + col) * 4);
-                                nowCol.push(r);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
+            while (x < w) {
+                key = y * w + x;
+                if (visited[key] || pixels[key * 4 + 3] !== 0) break;
 
-            if (col === x) {
-                prevCol = [...nowCol];
-            }
+                visited[key] = 1;
+                const idx = key * 4;
+                pixels[idx] = r;
+                pixels[idx + 1] = g;
+                pixels[idx + 2] = b;
+                pixels[idx + 3] = a;
 
-            matchFlag = false;
-
-            for (i = 0; i < prevCol.length; i += 1) {
-                for (j = 0; j < nowCol.length; j += 1) {
-                    if (nowCol[j] === prevCol[i]) {
-                        matchFlag = true;
-                        y = prevCol[i];
-                        break;
+                // Check pixel above
+                if (y > 0) {
+                    const aboveKey = (y - 1) * w + x;
+                    const aboveAvailable = !visited[aboveKey] && pixels[aboveKey * 4 + 3] === 0;
+                    if (!spanAbove && aboveAvailable) {
+                        stack.push(x, y - 1);
+                        spanAbove = true;
+                    } else if (spanAbove && !aboveAvailable) {
+                        spanAbove = false;
                     }
                 }
-                if (matchFlag) break;
-            }
 
-            if (matchFlag) {
-                prevCol = [...nowCol];
-                nowCol = [];
-            } else {
-                break;
+                // Check pixel below
+                if (y < h - 1) {
+                    const belowKey = (y + 1) * w + x;
+                    const belowAvailable = !visited[belowKey] && pixels[belowKey * 4 + 3] === 0;
+                    if (!spanBelow && belowAvailable) {
+                        stack.push(x, y + 1);
+                        spanBelow = true;
+                    } else if (spanBelow && !belowAvailable) spanBelow = false;
+                }
+
+                x++;
             }
         }
-
-        // Reset for right side flood fill
-        x = posX;
-        y = posY;
-        prevCol = [];
-        nowCol = [];
-
-        // Right side flood fill
-        for (let col = x; col < w; col += 1) {
-            // Top side
-            for (let row = y; row >= 0; row -= 1) {
-                if (this.checkPixelAvailable(col, row)) {
-                    stack.push((row * w + col) * 4);
-                    nowCol.push(row);
-                } else {
-                    if (row === y && this.checkPixelAvailable(col - 1, row - 1)) {
-                        if (this.checkPixelAvailable(col, row - 1)) {
-                            newStart = row - 1;
-                        } else if (this.checkPixelAvailable(col - 1, row - 2)) {
-                            newStart = row - 2;
-                        } else {
-                            newStart = -1;
-                        }
-
-                        for (let r = newStart; r >= 0; r -= 1) {
-                            if (this.checkPixelAvailable(col, r)) {
-                                stack.push((r * w + col) * 4);
-                                nowCol.push(r);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // Bottom side
-            for (let row = y; row < h; row += 1) {
-                if (this.checkPixelAvailable(col, row)) {
-                    stack.push((row * w + col) * 4);
-                    nowCol.push(row);
-                } else {
-                    if (row === y && this.checkPixelAvailable(col - 1, row + 1)) {
-                        if (this.checkPixelAvailable(col, row + 1)) {
-                            newStart = row + 1;
-                        } else if (this.checkPixelAvailable(col - 1, row + 2)) {
-                            newStart = row + 2;
-                        } else {
-                            newStart = h;
-                        }
-
-                        for (let r = newStart; r < h; r += 1) {
-                            if (this.checkPixelAvailable(col, r)) {
-                                stack.push((r * w + col) * 4);
-                                nowCol.push(r);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-
-            if (col === x) prevCol = [...nowCol];
-            matchFlag = false;
-
-            for (i = 0; i < prevCol.length; i += 1) {
-                for (j = 0; j < nowCol.length; j += 1) {
-                    if (nowCol[j] === prevCol[i]) {
-                        matchFlag = true;
-                        y = prevCol[i];
-                        break;
-                    }
-                }
-                if (matchFlag) break;
-            }
-
-            if (matchFlag) {
-                prevCol = [...nowCol];
-                nowCol = [];
-            } else break;
-        }
-
-        for (i = 0; i < stack.length; i += 1) this.setPixelByIndex(stack[i], color);
     }
 
     render(ctx: Context2DType, x: number = 0, y: number = 0): void {

@@ -1,11 +1,11 @@
-import { GITHUB_API_TOKEN, GITHUB_API_URL } from "@/lib/constants";
-import { GithubContributions } from "@/lib/github";
 import { addDays, addMinutes, format } from "date-fns";
 import { sumBy } from "lodash-es";
+import { GITHUB_API_TOKEN, GITHUB_API_URL } from "@/lib/constants";
+import type { GithubContributions } from "@/lib/github";
 
 export const fetchContributions = async (
     username: string,
-    token: string = GITHUB_API_TOKEN
+    token: string = GITHUB_API_TOKEN,
 ): Promise<GithubContributions> => {
     const body = {
         query: `query {
@@ -31,12 +31,12 @@ export const fetchContributions = async (
             }
         }
     }
-}`
+}`,
     };
     const response = await fetch(GITHUB_API_URL, {
         method: "POST",
         body: JSON.stringify(body),
-        headers: { Authorization: `bearer ${token}` }
+        headers: { Authorization: `bearer ${token}` },
     });
     const data = await response.json();
     return data.data;
@@ -51,12 +51,12 @@ export const calculateStats = (contributions: GithubContributions) => {
     const lastDate = new Date(
         calendar.weeks[calendar.weeks.length - 1].contributionDays[
             calendar.weeks[calendar.weeks.length - 1].contributionDays.length - 1
-        ].date
+        ].date,
     );
     const thisWeek = calendar.weeks[calendar.weeks.length - 1];
     const thisWeekFirst = new Date(thisWeek.contributionDays[0].date);
     const thisWeekLast = new Date(
-        thisWeek.contributionDays[thisWeek.contributionDays.length - 1].date
+        thisWeek.contributionDays[thisWeek.contributionDays.length - 1].date,
     );
     const contributionsThisWeek = sumBy(thisWeek.contributionDays, "contributionCount");
 
@@ -113,6 +113,6 @@ export const calculateStats = (contributions: GithubContributions) => {
         streakStart,
         streakEnd,
         streak,
-        average
+        average,
     };
 };

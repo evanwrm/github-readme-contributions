@@ -8,7 +8,7 @@ import { getTheme } from "@/lib/theme";
  * Benchmarks rendering of contributions.
  *
  * Run with:
- * tsx --inspect-brk --env-file .env.local scripts/bench.ts
+ * tsx --inspect-brk --env-file .env scripts/bench.ts
  * Then open Chrome and go to chrome://inspect
  */
 

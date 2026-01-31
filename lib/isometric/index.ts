@@ -8,12 +8,12 @@ import {
     PyramidDimension,
     SideXDimension,
     SideYDimension,
-    SlopeDimension
+    SlopeDimension,
 } from "@/lib/isometric/dimensions";
 import { BitmapData, PixelObject, PixelView } from "@/lib/isometric/display";
 import { Matrix, Point, Point3D } from "@/lib/isometric/geom";
 import { Brick, Cube, SideX, SideY } from "@/lib/isometric/primitive";
-import { CanvasFactory, CanvasManager } from "@/lib/isometric/utils";
+import { type CanvasFactory, CanvasManager } from "@/lib/isometric/utils";
 
 export const isometrics = (canvasFactory?: CanvasFactory) => {
     CanvasManager.setFactory(canvasFactory);
@@ -47,6 +47,6 @@ export const isometrics = (canvasFactory?: CanvasFactory) => {
         LineColor,
         PyramidColor,
         SideColor,
-        SlopeColor
+        SlopeColor,
     };
 };

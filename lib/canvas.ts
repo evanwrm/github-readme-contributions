@@ -1,5 +1,5 @@
-import { CanvasType, Context2DType } from "@/lib/isometric/utils";
-import { SKRSContext2D } from "@napi-rs/canvas";
+import type { SKRSContext2D } from "@napi-rs/canvas";
+import type { CanvasType, Context2DType } from "@/lib/isometric/utils";
 
 export const getPixel = (imageData: ImageData, x: number, y: number) => {
     const data = imageData.data;
@@ -29,7 +29,7 @@ export const roundRect = (
     height: number,
     radius: number | RoundRectRadius = 5,
     fill: boolean = false,
-    stroke: boolean = true
+    stroke: boolean = true,
 ) => {
     if (typeof radius === "number") radius = { tl: radius, tr: radius, br: radius, bl: radius };
     else if (typeof radius === "object") {
