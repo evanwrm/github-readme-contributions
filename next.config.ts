@@ -1,13 +1,15 @@
-/** @type {import('next').NextConfig} */
-const baseConfig = {
+import type { NextConfig } from "next";
+
+const baseConfig: NextConfig = {
     poweredByHeader: false,
     reactStrictMode: true,
     images: {
         loader: "default",
         formats: ["image/avif", "image/webp"],
-        remotePatterns: [{ hostname: "localhost" }]
+        remotePatterns: [{ hostname: "localhost" }],
     },
-    serverExternalPackages: ["@napi-rs/canvas"] 
+    reactCompiler: true,
+    serverExternalPackages: ["@napi-rs/canvas"],
 };
 
 export default baseConfig;

@@ -1,8 +1,8 @@
+import { performance } from "node:perf_hooks";
+import { createCanvas } from "@napi-rs/canvas";
 import { fetchContributions } from "@/lib/contributions";
 import { renderContributions } from "@/lib/render";
 import { getTheme } from "@/lib/theme";
-import { createCanvas } from "@napi-rs/canvas";
-import { performance } from "perf_hooks";
 
 /**
  * Benchmarks rendering of contributions.
@@ -15,9 +15,8 @@ import { performance } from "perf_hooks";
 const username = "levelsio"; // evanwrm
 const theme = getTheme("dark");
 
-const main = async () => {
-    const niterations = process.argv[2] ? parseInt(process.argv[2]) : 1;
-
+async function main() {
+    const niterations = process.argv[2] ? parseInt(process.argv[2], 10) : 1;
     const contributions = await fetchContributions(username);
 
     const start = performance.now();
@@ -28,6 +27,6 @@ const main = async () => {
     const end = performance.now();
 
     console.log(`Rendered ${niterations} contributions in ${end - start}ms`);
-};
+}
 
 main();
